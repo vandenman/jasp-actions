@@ -19,7 +19,7 @@ runs:
       # if: runner.os == 'macOS'
       run: |
         if [ "${{ runner.os }}" = 'macOS' ]; then
-          brew cask install xquartz
+          brew install --cask xquartz
         fi
       shell: bash
 
