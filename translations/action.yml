@@ -12,8 +12,10 @@ runs:
 
     - name: generate Language Files
       run: |
-        echo ${{ github.event.repository.name }}
-        generateLanguageFiles.sh ${{ github.event.repository.name }}
+        echo "Generating language files for module: ${{ github.event.repository.name }}"
+        ls
+        chmod +x generateLanguageFiles.sh
+        ./generateLanguageFiles.sh ${{ github.event.repository.name }}
       shell: bash
 
     - name: push to upstream
