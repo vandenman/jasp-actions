@@ -19,13 +19,5 @@ runs:
       shell: bash
 
     - name: push to upstream
-      run: |
-        git config user.name github-actions
-        git config user.email github-actions@github.com
-        git status
-        git add .
-        git status
-        git commit -m "updated translation files"
-        git status
-        git push
+      run: ${{ github.action_path }}/updateUpstream.sh
       shell: bash
