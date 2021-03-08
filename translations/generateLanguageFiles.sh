@@ -1,12 +1,8 @@
 #!/bin/bash
 
-# QT_PATH=~/Qt/5.15.2
-
-MODULE_NAMES=(jaspTestModule)
-LANGUAGE_CODES=(nl de es pt ja tr)
-
-
-# export PATH=$QT_PATH/clang_64/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin;
+MODULE_NAMES=${1:-"jaspTestModule"}
+PATH_TO_R_FILE=$2
+LANGUAGE_CODES=${3:-"nl de es pt ja tr"}
 
 for moduleName in ${MODULE_NAMES[@]}
 do
@@ -21,5 +17,6 @@ do
     msgattrib --no-obsolete --no-location ${moduleName}/po/QML-${languageCode}.po -o ${moduleName}/po/QML-${languageCode}.po ; 
     lrelease ${moduleName}/po/QML-${languageCode}.po -qm ${moduleName}/inst/qml/translations/${moduleName}-${languageCode}.qm ; 
   done
-  Rscript ${{ github.action_path }}/translate.R ${moduleName};
+  echo Rscript ${PATH_TO_R_FILE}/translate.R ${moduleName}
+  Rscript ${PATH_TO_R_FILE}/translate.R ${moduleName};
 done
