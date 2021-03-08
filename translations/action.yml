@@ -5,6 +5,26 @@ runs:
   using: "composite"
   steps:
 
+    - name: install dependencies
+      run: sudo apt install gettext qttools5-dev-tools
+      shell: bash
+
+
     - name: generate Language Files
-      run: generateLanguageFiles.sh
+      run: |
+        echo ${{ github.event.repository.name }}
+        generateLanguageFiles.sh ${{ github.event.repository.name }}
+      shell: bash
+
+    - name: push to upstream
+    - run: |
+        date > generated.txt
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+        git status
+        git add .
+        git status
+        git commit -m "updated translation files"
+        git status
+        git push
       shell: bash

@@ -1,14 +1,12 @@
 #!/bin/bash
 
+# QT_PATH=~/Qt/5.15.2
 
-
-QT_PATH=~/Qt/5.15.2
-JASP_DESKTOP_PATH=<path to gasp-desktop repo>
-
+MODULE_NAMES=(jaspTestModule)
 LANGUAGE_CODES=(nl de es pt ja tr)
-MODULE_NAMES=(jaspDistributions)
 
-export PATH=$QT_PATH/clang_64/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin;
+
+# export PATH=$QT_PATH/clang_64/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin;
 
 for moduleName in ${MODULE_NAMES[@]}
 do
@@ -23,5 +21,5 @@ do
     msgattrib --no-obsolete --no-location ${moduleName}/po/QML-${languageCode}.po -o ${moduleName}/po/QML-${languageCode}.po ; 
     lrelease ${moduleName}/po/QML-${languageCode}.po -qm ${moduleName}/inst/qml/translations/${moduleName}-${languageCode}.qm ; 
   done
-  Rscript ${JASP_DESKTOP_PATH}/Tools/translate.R ${moduleName};
+  Rscript translate.R ${moduleName};
 done
