@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# this script tries to push directly to upstream. If that fails it opens a new branch and a pr.
-
 git config user.name github-actions
 git config user.email github-actions@github.com
 git status
+
+echo "here"
 
 git diff-index --quiet HEAD
 
@@ -13,11 +13,15 @@ if [ $? = 0 ] ; then
 	exit 0
 fi
 
+echo "here 1"
+
 git add "*.po$" "*.pot$"
 git status
 git commit -m "updated translation files"
 git status
+echo "here 2"
 git remote -v
+echo "here 3"
 git push
 
 if [ $? = 0 ] ; then
