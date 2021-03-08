@@ -21,5 +21,5 @@ do
     msgattrib --no-obsolete --no-location ${moduleName}/po/QML-${languageCode}.po -o ${moduleName}/po/QML-${languageCode}.po ; 
     lrelease ${moduleName}/po/QML-${languageCode}.po -qm ${moduleName}/inst/qml/translations/${moduleName}-${languageCode}.qm ; 
   done
-  Rscript translate.R ${moduleName};
+  Rscript ${{ github.action_path }}/translate.R ${moduleName};
 done
