@@ -1,0 +1,10 @@
+name: 'Update translation files'
+description: 'Updates the translation files that live within the /po folder.'
+
+runs:
+  using: "composite"
+  steps:
+
+    - name: generate Language Files
+      run: generateLanguageFiles.sh
+      shell: bash
