@@ -4,8 +4,7 @@ git config user.name github-actions
 git config user.email github-actions@github.com
 git status
 
-echo "here"
-
+git add "po" "inst/qml/translations" "*.po" "*.pot"
 git diff-index --quiet HEAD
 
 if [ $? = 0 ] ; then
@@ -13,15 +12,8 @@ if [ $? = 0 ] ; then
 	exit 0
 fi
 
-echo "here 1"
-
-git add "*.po$" "*.pot$"
-git status
 git commit -m "updated translation files"
-git status
-echo "here 2"
-git remote -v
-echo "here 3"
+echo $(git remote -v)
 git push
 
 if [ $? = 0 ] ; then
