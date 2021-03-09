@@ -1,28 +1,31 @@
 #!/bin/bash
 
+echo "Attempting to push any changed files."
+
 git config user.name github-actions
 git config user.email github-actions@github.com
-git status
+
+echo "$(git status)"
 
 git add "po" "inst/qml/translations" "*.po" "*.pot"
 git diff-index --quiet HEAD
 
 if [ $? = 0 ] ; then
-	echo "No translations files were updated."
+	echo "No translations files were updated, not comitting anything."
 	exit 0
 fi
 
-git commit -m "updated translation files"
-echo $(git remote -v)
-git push
+# also print the commands for some nicer feedback
+echo "$(git status)"
+echo "$(git commit -m 'updated translation files')"
+echo "$(git status)"
+echo "$(git push)"
+echo "$(git status)"
 
 if [ $? = 0 ] ; then
 	echo "pushed directly to master."
+	exit 0;
 else
-	branchName="translations_update_$(date +"%Y_%m_%d_%H_%M_%S")"
-	echo "pushing failed, creating a new branch called ${branchName} and opening a pull request."
-	git checkout -b branchName
-	# TODO: who is origin here?
-	git push origin branchName
-	# TODO: open a pr
+	echo "pushing failed, probably another (force) push happened while this was in progress."
+	exit 1;
 fi
