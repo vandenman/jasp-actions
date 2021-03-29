@@ -11,8 +11,7 @@ git add "po" "inst/qml/translations" "*.po" "*.pot"
 git diff-index --quiet HEAD
 
 if [ $? = 0 ] ; then
-	echo "No translations files were updated, not comitting anything."
-	exit 0
+	echo "No translations files were updated, possibly only pushing a merged weblate PR ."
 fi
 
 # also print the commands for some nicer feedback
@@ -26,6 +25,6 @@ if [ $? = 0 ] ; then
 	echo "pushed directly to master."
 	exit 0;
 else
-	echo "pushing failed, probably another (force) push happened while this was in progress."
+	echo "pushing failed!"
 	exit 1;
 fi

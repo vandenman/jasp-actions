@@ -5,10 +5,13 @@ runs:
   using: "composite"
   steps:
 
+    - name: Find and merge weblate pull requests
+      run: ${{ github.action_path }}/findAndMergeWeblate.sh ${{GITHUB_REPOSITORY}}
+      shell: bash
+
     - name: install dependencies
       run: sudo apt install gettext qttools5-dev-tools
       shell: bash
-
 
     - name: generate Language Files
       run: |
