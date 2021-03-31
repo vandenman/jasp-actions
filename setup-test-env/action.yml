@@ -62,6 +62,7 @@ runs:
     - name: Setup jaspTools
       run: |
         install.packages("remotes")
+        install.packages("ragg")
         remotes::install_github("jasp-stats/jaspTools")
         jaspTools::setupJaspTools()
       shell: Rscript {0}
