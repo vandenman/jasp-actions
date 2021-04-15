@@ -11,7 +11,7 @@ create_file_if_it_doesnt_exist() {
 }
 
 do_lupdate()	{	lupdate -locations none -extensions cpp,qml -recursive $1 -ts $2;	}
-do_msgattrib()	{	msgattrib --no-obsolete --no-location ${1}/po/QML-${1}.pot -o $2;	}
+do_msgattrib()	{	msgattrib --no-obsolete --no-location ${1} -o $1;	}
 
 # in case people try this at home
 validate_module()
@@ -35,7 +35,7 @@ do
 
 	create_file_if_it_doesnt_exist $FILE
 	do_lupdate   $moduleName $FILE
-	do_msgattrib $moduleName $FILE
+	do_msgattrib $FILE
 
 	for languageCode in ${LANGUAGE_CODES[@]}
 	do
@@ -44,7 +44,7 @@ do
 
 		create_file_if_it_doesnt_exist $FILE
 		do_lupdate   $moduleName $LANGUAGEFILE
-		do_msgattrib $moduleName $LANGUAGEFILE
+		do_msgattrib $LANGUAGEFILE
 
 		QMFILE=${moduleName}/inst/qml/translations/${moduleName}-${languageCode}.qm
 
