@@ -44,7 +44,9 @@ case ${no_open_webplate_prs} in
 		git config user.name github-actions
 		git config user.email github-actions@github.com
 		echo "$(git status)"
-		echo "$(git merge refs/pull/${pull_id}/head)"
+		echo "$(git fetch origin refs/pull/${pull_id}/head)"
+		echo "$(git merge FETCH_HEAD)"
+		# echo "$(git merge refs/pull/${pull_id}/head)"
 
 		exit 0;;
 
