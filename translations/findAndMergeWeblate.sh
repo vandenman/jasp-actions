@@ -43,6 +43,7 @@ case ${no_open_webplate_prs} in
 
 		git config user.name github-actions
 		git config user.email github-actions@github.com
+		echo "$(git pull)"
 		echo "$(git status)"
 		echo "$(git fetch origin refs/pull/${pull_id}/head)"
 		echo "$(git merge --squash --allow-unrelated-histories FETCH_HEAD)"
