@@ -27,7 +27,6 @@ case ${no_open_webplate_prs} in
 	-1)
 
 		echo "Error: did not get an expected reply from the github api. This probably requires human intervention. The response was:"
-		echo
 		echo "${curl_reply}"
 		exit 1;;
 
@@ -55,7 +54,6 @@ case ${no_open_webplate_prs} in
 
 	*)
 		echo "Found 2 or more open weblate PRs. This probably requires human intervention. The response was:"
-		echo
 		echo "$curl_reply"
 		exit 1;;
 
