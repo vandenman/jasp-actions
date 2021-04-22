@@ -44,12 +44,7 @@ case ${no_open_webplate_prs} in
 		git config user.email github-actions@github.com
 		echo "$(git status)"
 		echo "$(git fetch origin refs/pull/${pull_id}/head:PRBranch)"
-		echo "$(git checkout PRBranch)"
-		echo "$(git diff main..PRBranch)"
-		echo "$(git rebase origin/main)"
-		# echo "$(git merge --squash --allow-unrelated-histories FETCH_HEAD)"
-		# echo "$(git commit)"
-		# echo "$(git merge refs/pull/${pull_id}/head)"
+		echo "$(git merge --squash PRBranch)"
 
 		exit 0;;
 
