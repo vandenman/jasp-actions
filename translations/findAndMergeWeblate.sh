@@ -43,8 +43,18 @@ case ${no_open_webplate_prs} in
 		git config user.name github-actions
 		git config user.email github-actions@github.com
 		echo "$(git status)"
-		echo "$(git fetch origin refs/pull/${pull_id}/head:PRBranch)"
-		echo "$(git merge --squash PRBranch)"
+		put_url="https://api.github.com/repos/${owner_repo}/pulls/${pull_id}/merge"
+		echo "${put_url}"
+
+		curl_reply=$(curl \
+			-X PUT
+			-H "Accept: application/vnd.github.v3+json" \
+			$put_url \
+			-d '{"commit_title":"WebLate Merge", "merge_method": "squash"}' \
+			--header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}'
+		)
+		#echo "$(git fetch origin refs/pull/${pull_id}/head:PRBranch)"
+		#echo "$(git merge --squash PRBranch)"
 
 		exit 0;;
 
