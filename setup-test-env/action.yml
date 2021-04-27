@@ -1,5 +1,5 @@
 name: 'Set up test environment for JASP unit tests'
-description: 'Downloads and installs R packages and system dependencies. Only works for Windows and macOS.'
+description: 'Downloads and installs R packages and system dependencies.'
 inputs:
   requiresJAGS:
     description: 'Should JAGS be available?'
@@ -41,6 +41,22 @@ runs:
         fi
       shell: bash
 
+    - name: Install system dependencies on linux
+      run: |
+        if [ "${{ runner.os }}" = 'Linux' ]; then
+          
+          # ragg                                          requires libharfbuzz-dev libfribidi-dev 
+          # credentials   (dependency of usethis)         requires libgit2-dev
+          # curl          (dependency of usethis)         requires libcurl4-openssl-dev
+          
+          sudo apt install libharfbuzz-dev libfribidi-dev libgit2-dev libcurl4-openssl-dev
+          
+          if [ "${{ inputs.requiresJAGS }}" = 'true' ]; then
+            sudo apt install jags
+          fi
+        fi
+      shell: bash
+
     - name: Locate JAGS on Windows
       # if: inputs.requiresJAGS && runner.os == 'Windows'
       run: |
@@ -52,6 +68,10 @@ runs:
 
     - name: Setup jaspTools
       run: |
+        if ("${{ runner.os }}" == "Linux") {
+          # repos from https://github.com/r-lib/actions/tree/master/examples#standard-ci-workflow
+          options("repos" = "https://packagemanager.rstudio.com/cran/__linux__/focal/latest")
+        }
         install.packages("remotes")
         install.packages("ragg")
         remotes::install_github("jasp-stats/jaspTools")
