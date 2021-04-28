@@ -45,14 +45,14 @@ case ${no_open_webplate_prs} in
 		echo "$(git status)"
 		put_url="https://api.github.com/repos/${owner_repo}/pulls/${pull_id}/merge"
 		echo "${put_url}"
-
 		curl_reply=$(curl \
-			-X PUT
-			-H "Accept: application/vnd.github.v3+json" \
-			$put_url \
-			-d '{"commit_title":"WebLate Merge", "merge_method": "squash"}' \
-			--header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}'
-		)
+		        -X PUT \
+		        -H "Accept: application/vnd.github.v3+json" \
+		        $put_url \
+		        -d '{"commit_title":"myCommit", "merge_method": "squash"}' \
+        		-u username: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)
+		echo "$curl_reply"
+		
 		#echo "$(git fetch origin refs/pull/${pull_id}/head:PRBranch)"
 		#echo "$(git merge --squash PRBranch)"
 
