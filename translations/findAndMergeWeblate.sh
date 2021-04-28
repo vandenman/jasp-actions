@@ -4,6 +4,7 @@ owner_repo="$1"
 token="$2"
 author='weblate'
 
+echo "Token is: ${token}"
 get_url="https://api.github.com/search/issues?q=is:pr+repo:${owner_repo}+author:${author}+state:open"
 
 curl_reply=$(curl \
