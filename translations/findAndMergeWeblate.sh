@@ -1,6 +1,7 @@
 #!/bin/bash
 
 owner_repo="$1"
+token="$2"
 author='weblate'
 
 get_url="https://api.github.com/search/issues?q=is:pr+repo:${owner_repo}+author:${author}+state:open"
@@ -50,7 +51,7 @@ case ${no_open_webplate_prs} in
 		        -H "Accept: application/vnd.github.v3+json" \
 		        $put_url \
 		        -d '{"commit_title":"myCommit", "merge_method": "squash"}' \
-        		--header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}')
+        		--header 'authorization: Bearer ${token}')
 		echo "$curl_reply"
 		
 		#echo "$(git fetch origin refs/pull/${pull_id}/head:PRBranch)"
