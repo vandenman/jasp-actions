@@ -6,7 +6,7 @@ runs:
   steps:
 
     - name: Find and merge weblate pull requests
-      run: ${{ github.action_path }}/findAndMergeWeblate.sh $GITHUB_REPOSITORY
+      run: ${{ github.action_path }}/findAndMergeWeblate.sh $GITHUB_REPOSITORY ${{ secrets.GITHUB_TOKEN }}
       shell: bash
 
     - name: install dependencies
@@ -17,7 +17,7 @@ runs:
       run: |
         echo "Generating language files for module: ${{ github.event.repository.name }}"
         cd ../
-        ${{ github.action_path }}/generateLanguageFiles.sh ${{ github.event.repository.name }} ${{ secrets.GITHUB_TOKEN }}
+        ${{ github.action_path }}/generateLanguageFiles.sh ${{ github.event.repository.name }} ${{ github.action_path }}
       shell: bash
 
     - name: push to upstream
