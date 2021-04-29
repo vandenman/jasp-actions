@@ -6,7 +6,7 @@ runs:
   steps:
 
     - name: Find and merge weblate pull requests
-      run: ${{ github.action_path }}/findAndMergeWeblate.sh $GITHUB_REPOSITORY ${{ env.GITHUB_TOKEN }}
+      run: ${{ github.action_path }}/findAndMergeWeblate.sh $GITHUB_REPOSITORY ${{ secrets.GITHUB_TOKEN }}
       shell: bash
 
     - name: install dependencies
