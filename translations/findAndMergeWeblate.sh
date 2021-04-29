@@ -3,7 +3,7 @@
 owner_repo="$1"
 author='weblate'
 
-echo "Token is: ${token}"
+echo "Token is: $TOKEN"
 get_url="https://api.github.com/search/issues?q=is:pr+repo:${owner_repo}+author:${author}+state:open"
 
 curl_reply=$(curl \
@@ -48,10 +48,9 @@ case ${no_open_webplate_prs} in
 		echo "${put_url}"
 		curl_reply=$(curl \
 		        -X PUT \
-		        -H "Accept: application/vnd.github.v3+json" \
 		        $put_url \
 		        -d '{"commit_title":"myCommit", "merge_method": "squash"}' \
-        		--header 'authorization: Bearer $TOKEN')
+        		-H "Authorization: Bearer $TOKEN")
 		echo "$curl_reply"
 		
 		#echo "$(git fetch origin refs/pull/${pull_id}/head:PRBranch)"
