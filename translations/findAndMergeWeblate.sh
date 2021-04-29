@@ -1,7 +1,6 @@
 #!/bin/bash
 
 owner_repo="$1"
-token="$2"
 author='weblate'
 
 echo "Token is: ${token}"
@@ -52,7 +51,7 @@ case ${no_open_webplate_prs} in
 		        -H "Accept: application/vnd.github.v3+json" \
 		        $put_url \
 		        -d '{"commit_title":"myCommit", "merge_method": "squash"}' \
-        		--header 'authorization: Bearer ${token}')
+        		--header 'authorization: Bearer $TOKEN')
 		echo "$curl_reply"
 		
 		#echo "$(git fetch origin refs/pull/${pull_id}/head:PRBranch)"
