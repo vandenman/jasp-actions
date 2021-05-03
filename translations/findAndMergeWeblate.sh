@@ -27,4 +27,8 @@ else
     echo $(gh pr review --approve $pr_number2 -R $owner_repo)
     echo $(gh pr merge --squash $pr_number2 -R $owner_repo)
   fi
+  
+  git config user.name github-actions
+  git config user.email github-actions@github.com
+  git pull
 fi
