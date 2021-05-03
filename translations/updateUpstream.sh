@@ -7,7 +7,7 @@ git config user.email github-actions@github.com
 
 echo "$(git status)"
 
-git add "po" "inst/qml/translations" "*.po" "*.pot" "*.qm"
+git add "po" "inst/qml/translations" "*.po" "*.pot" "*.qm" "*.mo"
 git diff-index --quiet HEAD
 
 if [ $? = 0 ] ; then
