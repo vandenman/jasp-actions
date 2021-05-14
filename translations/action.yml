@@ -17,7 +17,7 @@ runs:
       run: |
         echo "Generating language files for module: $GITHUB_REPOSITORY"
         cd ../
-        ${{ github.action_path }}/generateLanguageFiles.sh $GITHUB_REPOSITORY
+        ${{ github.action_path }}/generateLanguageFiles.sh $GITHUB_REPOSITORY ${{ github.action_path }}
       shell: bash
 
     - name: push to upstream
