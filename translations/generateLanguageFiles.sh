@@ -2,7 +2,7 @@
 
 MODULE_NAMES=${1:-"jaspTestModule"}
 MODULE_NAMES=$(echo $MODULE_NAMES | cut -d'/' -f 2)
-PATH_TO_R_FILE=$2
+PATH_TO_R_FILE=$PWD
 LANGUAGE_CODES=${3:-"nl de es pt ja tr"}
 
 create_file_if_it_doesnt_exist() {
