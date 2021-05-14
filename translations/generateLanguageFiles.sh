@@ -52,6 +52,6 @@ do
 		lrelease $LANGUAGEFILE -qm $QMFILE
 
 	done
-	echo Rscript ${PATH_TO_R_FILE}/translate.R ${moduleName}
-	Rscript ${PATH_TO_R_FILE}/translate.R ${moduleName};
+	echo Rscript translate.R ${moduleName}
+	Rscript translate.R ${moduleName};
 done
