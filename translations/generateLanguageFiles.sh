@@ -2,7 +2,7 @@
 
 MODULE_NAMES=${1:-"jaspTestModule"}
 MODULE_NAMES=$(echo $MODULE_NAMES | cut -d'/' -f 2)
-PATH_TO_R_FILE=$PWD
+PATH_TO_R_FILE=$2
 LANGUAGE_CODES=${3:-"nl de es pt ja tr"}
 
 create_file_if_it_doesnt_exist() {
@@ -52,6 +52,6 @@ do
 		lrelease $LANGUAGEFILE -qm $QMFILE
 
 	done
-	echo Rscript translate.R ${moduleName}
-	Rscript translate.R ${moduleName};
+	echo Rscript $PATH_TO_R_FILE/translate.R ${moduleName}
+	Rscript $PATH_TO_R_FILE/translate.R ${moduleName};
 done
