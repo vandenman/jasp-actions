@@ -26,32 +26,44 @@ for moduleName in ${MODULE_NAMES[@]}
 do
 	echo Module: ${moduleName}
 
-	validate_module ${moduleName}
+	if [ ${moduleName} = "jasp-desktop" ]
+	then
+		FILE=${moduleName}/Desktop/po/jaspDesktop.pot
+	else
+		validate_module ${moduleName}
 
-	# ensure we don't crash if no translation infrastructure exists
-	mkdir -p "${moduleName}/po"
-	mkdir -p "${moduleName}/inst/qml/translations"
+		# ensure we don't crash if no translation infrastructure exists
+		mkdir -p "${moduleName}/po"
+		mkdir -p "${moduleName}/inst/qml/translations"
 
-	FILE=${moduleName}/po/QML-${moduleName}.pot
+		FILE=${moduleName}/po/QML-${moduleName}.pot
+		create_file_if_it_doesnt_exist $FILE
+	fi
 
-	create_file_if_it_doesnt_exist $FILE
 	do_lupdate   $moduleName $FILE
 	do_msgattrib $FILE
 
 	for languageCode in ${LANGUAGE_CODES[@]}
 	do
 		echo Generating language File: ${languageCode}
-		LANGUAGEFILE=${moduleName}/po/QML-${languageCode}.po
+		
+		if [ ${moduleName} = "jasp-desktop" ]
+		then
+			LANGUAGEFILE=${moduleName}/Desktop/po/jaspDesktop-${languageCode}.po
+			QMFILE=${moduleName}/Resources/translations/jaspDesktop-${languageCode}.qm
+		else
+			LANGUAGEFILE=${moduleName}/po/QML-${languageCode}.po
+		fi
 
-		create_file_if_it_doesnt_exist $FILE
 		do_lupdate   $moduleName $LANGUAGEFILE
 		do_msgattrib $LANGUAGEFILE
-
-		QMFILE=${moduleName}/inst/qml/translations/${moduleName}-${languageCode}.qm
-
 		lrelease $LANGUAGEFILE -qm $QMFILE
 
 	done
-	echo Rscript $PATH_TO_R_FILE/translate.R ${moduleName}
-	Rscript $PATH_TO_R_FILE/translate.R ${moduleName};
+	
+	if [ ${moduleName} = "jasp-desktop" ]
+	then
+		echo Rscript $PATH_TO_R_FILE/translate.R ${moduleName}
+		Rscript $PATH_TO_R_FILE/translate.R ${moduleName};
+	fi
 done
