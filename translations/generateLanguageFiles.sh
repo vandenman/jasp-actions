@@ -50,7 +50,7 @@ do
 		if [ ${moduleName} = "jasp-desktop" ]
 		then
 			LANGUAGEFILE=${moduleName}/Desktop/po/jaspDesktop-${languageCode}.po
-			QMFILE=${moduleName}/Resources/translations/jaspDesktop-${languageCode}.qm
+			QMFILE=${moduleName}/Resources/Translations/jaspDesktop-${languageCode}.qm
 		else
 			LANGUAGEFILE=${moduleName}/po/QML-${languageCode}.po
 			QMFILE=${moduleName}/inst/qml/translations/${moduleName}-${languageCode}.qm
