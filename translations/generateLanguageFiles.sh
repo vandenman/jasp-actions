@@ -17,7 +17,7 @@ do_msgattrib()	{	msgattrib --no-obsolete --no-location ${1} -o $1;	}
 # in case people try this at home
 validate_module()
 {
-	if [ ! -f "$1/inst/qml" ] | [ ! -f "$1/R" ]; then
+	if [ ! -d "$1/inst/qml" ] | [ ! -d "$1/R" ]; then
 		echo "either $1/inst/qml or $1/R doesn't exist, so $1 is probably not a JASP module."
 	fi
 }
