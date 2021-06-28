@@ -62,7 +62,7 @@ do
 
 	done
 	
-	if [ ${moduleName} = "jasp-desktop" ]
+	if [ ${moduleName} != "jasp-desktop" ]
 	then
 		echo Rscript $PATH_TO_R_FILE/translate.R ${moduleName}
 		Rscript $PATH_TO_R_FILE/translate.R ${moduleName};
