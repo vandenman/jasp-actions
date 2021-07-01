@@ -9,7 +9,9 @@ echo "$(git pull)"
 echo "Status after pull:"
 echo "$(git status)"
 
-git add "po" "inst/qml/translations" "*.po" "*.pot"
+git add "po" "inst/qml/translations" 
+git add "*.po"
+git add "*.pot"
 git add "*.qm"
 git add "*.mo"
 git diff-index --quiet HEAD
