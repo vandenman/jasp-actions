@@ -1,0 +1,13 @@
+name: 'Test wlc'
+description: 'Test wlc'
+
+runs:
+  using: "composite"
+  steps:
+      - name: Install wlc
+        run: pip3 install wlc
+        shell: bash
+        
+      - name: Lock jasptestmodule
+        run: wlc --key ${{ secrets.WEBLATE_KEY }} --url https://hosted.weblate.org/api/ lock jasp/jasptestmodule-qml
+        shell: bash
