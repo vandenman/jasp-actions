@@ -9,5 +9,5 @@ runs:
         shell: bash
         
       - name: Lock jasptestmodule
-        run: wlc --key $WEBLATE_KEY --url https://hosted.weblate.org/api/ lock jasp/jasptestmodule-qml
+        run: wlc --key $WEBLATE_KEY --url https://hosted.weblate.org/api/ lock jasp/$QML_REPO
         shell: bash
