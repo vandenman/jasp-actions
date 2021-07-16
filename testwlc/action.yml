@@ -8,6 +8,11 @@ runs:
         run: pip3 install wlc
         shell: bash
         
-      - name: Lock jasptestmodule
+      - name: Lock weblate qml repo
         run: wlc --key $WEBLATE_KEY --url https://hosted.weblate.org/api/ lock jasp/$QML_REPO
+        shell: bash
+        
+      - name: Lock weblate r repo
+        if: $R_REPO != ''
+        run: wlc --key $WEBLATE_KEY --url https://hosted.weblate.org/api/ lock jasp/$R_REPO
         shell: bash
