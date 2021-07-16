@@ -4,7 +4,15 @@ description: 'Updates the translation files that live within the /po folder.'
 runs:
   using: "composite"
   steps:
-
+  
+    - name: Install wlc
+      run: pip3 install wlc
+      shell: bash
+        
+    - name: Commit and lock weblate repos
+      run: ${{ github.action_path }}/lockWeblate.sh
+      shell: bash
+      
     - name: Find and merge weblate pull requests
       run: ${{ github.action_path }}/findAndMergeWeblate.sh $GITHUB_REPOSITORY
       shell: bash
@@ -22,4 +30,8 @@ runs:
 
     - name: push to upstream
       run: ${{ github.action_path }}/updateUpstream.sh
+      shell: bash
+      
+    - name: Reset and unlock weblate repos
+      run: ${{ github.action_path }}/unlockWeblate.sh
       shell: bash
