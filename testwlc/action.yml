@@ -9,7 +9,5 @@ runs:
         shell: bash
         
       - name: Lock jasptestmodule
-        env:
-          WEBLATE_KEY: ${{ secrets.WEBLATE_KEY }}
         run: wlc --key $WEBLATE_KEY --url https://hosted.weblate.org/api/ lock jasp/jasptestmodule-qml
         shell: bash
