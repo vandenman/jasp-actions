@@ -13,6 +13,5 @@ runs:
         shell: bash
         
       - name: Lock weblate r repo
-        if: $R_REPO != ''
         run: wlc --key $WEBLATE_KEY --url https://hosted.weblate.org/api/ lock jasp/$R_REPO
         shell: bash
