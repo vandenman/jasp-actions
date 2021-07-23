@@ -8,10 +8,6 @@ runs:
     - name: Install wlc
       run: pip3 install wlc
       shell: bash
-        
-    - name: Commit and lock weblate repos
-      run: ${{ github.action_path }}/lockWeblate.sh
-      shell: bash
       
     - name: Find and merge weblate pull requests
       run: ${{ github.action_path }}/findAndMergeWeblate.sh $GITHUB_REPOSITORY
