@@ -2,7 +2,7 @@ name: 'Capitalization-checker'
 description: 'Verifies capitalization of namespace exports, helpfiles, and qml files.'
 inputs:
   path:
-    description: 'the top level directory of a JASP module (e.g., with 'R' and 'inst' as subdirectories). Default to the current directory (pwd)'
+    description: "the top level directory of a JASP module (e.g., with 'R' and 'inst' as subdirectories). Default to the current directory (pwd)"
     required: true
     default: "."
 
