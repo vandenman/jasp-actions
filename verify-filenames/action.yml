@@ -11,5 +11,5 @@ runs:
   steps:
 
     - name: Install system dependencies on macOS
-      run: ${{ github.action_path }}verify-capitalization-helpfile-qml-files.sh ${{ inputs.path }}
+      run: ${{ github.action_path }}/verify-capitalization-helpfile-qml-files.sh ${{ inputs.path }}
       shell: bash
