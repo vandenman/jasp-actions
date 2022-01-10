@@ -13,7 +13,6 @@ if [ "${ROOT}" == '.' ]; then
 	ROOT=$(pwd)
 fi
 
-
 DESCRIPTION_QML="${ROOT}/inst/Description.qml"
 NAMESPACE="${ROOT}/NAMESPACE"
 HELP_FILES_DIR="${ROOT}/inst/help"
@@ -31,8 +30,6 @@ declare -a R_EXPORTS_MISSING
 declare -a HELP_FILES_BAD_CAPITALIZATION
 declare -a QML_FILES_BAD_CAPITALIZATION
 
-
-
 for FUN in ${FUNCTIONS}
 do
 
@@ -45,8 +42,8 @@ do
 
 	if [ -d "${HELP_FILES_DIR}" ]; then 
 
-		HELPFILE_CASE_SENSITIVE=$(ls "${HELP_FILES_DIR}"   | grep               "^${FUN}[\.md|\.html]$" | head -n 1)
-		HELPFILE_CASE_INSENSITIVE=$(ls "${HELP_FILES_DIR}" | grep --ignore-case "^${FUN}[\.md|\.html]$" | head -n 1)
+		HELPFILE_CASE_SENSITIVE=$(ls "${HELP_FILES_DIR}"   | grep               "^${FUN}\(\.md\|\.html\)$" | head -n 1)
+		HELPFILE_CASE_INSENSITIVE=$(ls "${HELP_FILES_DIR}" | grep --ignore-case "^${FUN}\(\.md\|\.html\)$" | head -n 1)
 
 		debug_printf "helpfile: case_sensitive = \"%s\" | case_insensitive = \"%s\"\n" "$HELPFILE_CASE_SENSITIVE" "$HELPFILE_CASE_INSENSITIVE"
 
