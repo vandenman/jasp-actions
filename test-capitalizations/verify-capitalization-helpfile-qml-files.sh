@@ -99,7 +99,12 @@ fi
 
 echo "EXITCODE = ${EXITCODE}"
 exit ${EXITCODE}
-# 0 : everything ok
-# 1 : missing R exports
-# 2 : helpfiles with incorrect capitalization
-# 4 : missing qml file (or incorrect capitalization)
+#0: success
+#1: missing R exports
+#2: helpfiles with incorrect capitalization
+#3: missing R exports + helpfiles with incorrect capitalization
+#4: missing qml file (or incorrect capitalization)
+#5: missing R exports + missing qml file (or incorrect capitalization)
+#6: helpfiles with incorrect capitalization + missing qml file (or incorrect capitalization)
+#7: missing R exports + helpfiles with incorrect capitalization + missing qml file (or incorrect capitalization)
+
