@@ -9,5 +9,5 @@ runs:
         shell: bash
         
       - name: Lock weblate repos
-        run: ${{ github.action_path }}/lockWeblate.sh
+        run: ${{ github.action_path }}\lockWeblate.sh
         shell: bash
