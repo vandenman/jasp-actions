@@ -156,14 +156,22 @@ jobs:
         id: step_two
         run: |
           echo "${{ env.action_state }}" # This will output 'yellow'
-      
+          
+      - name: print file from githubscript
+        uses: actions/github-script@v6
+        with:
+          script: |
+            fetch('formattedString.txt')
+              .then(response => response.text())
+              .then(text => console.log(text))
+
       - name: put linter output into environment
         run: |
           cat 'formattedString.txt'
           echo
           {
             echo 'lintrResults<<EOF_LINT_RESULTS'
-            cat 'formattedString.txt'
+            echo $(cat 'formattedString.txt')
             echo 'EOF_LINT_RESULTS'
           }  >> "$GITHUB_ENV"
         shell: bash
@@ -173,11 +181,13 @@ jobs:
           echo "The output is: ${{ env.lintrResults }}"
         shell: bash
 
-
       - name: Update initial comment
         uses: actions/github-script@v6
         with:
           script: |
+            fetch('formattedString.txt')
+              .then(response => response.text())
+              .then(text => console.log(text))
             body = "${{ env.lintrResults }}";
             console.log(body);
             if (body != "") {
