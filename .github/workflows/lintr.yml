@@ -96,7 +96,7 @@ jobs:
             formattedString
           }
           
-          formattedString <- formatLintResultByLinter(result)
+          formattedString <- formatLintResultByLinter(result[1:50])
           #cat(formattedString)
           #envFile <- Sys.getenv("GITHUB_ENV")
           #cat(sprintf("\n\n\ntrying to write to %s", envFile))
