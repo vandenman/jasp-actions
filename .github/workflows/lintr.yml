@@ -1,4 +1,4 @@
-name: Reusable workflow for linting R code in JASP modules
+name: Reusable workflow for linting R code in Jasp modules
 
 on:
   workflow_call:
@@ -8,6 +8,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      LINTR_COMMENT_BOT: true # ${{ github.event_name == 'pull_request' && 'true' || 'false' }}
+
     steps:
 
       - uses: actions/checkout@v2
@@ -23,35 +25,30 @@ jobs:
 
       - name: Lint
         run: |
-          lintr::lint_package(
-            linters = lintr::
+          library(lintr)
+
+          undesirableFunctions <- with_defaults(
+            default   = lintr::default_undesirable_functions,
+            "sapply"  = "use vapply or purrr::map_<type>",
+            ".v"      = "remove it",
+            ".unv"    = "remove it",
+            "options" = NULL
           )
+
+          exclusions <- list(
+            "R/RcppExports.R",
+            "tests/testthat.R"
+          )
+
+          linters <- with_defaults(
+            line_length_linter = line_length_linter(180),
+            object_length_linter(50L),
+            object_name_linter("camelCase"),
+            undesirable_function_linter(undesirableFunctions),
+            # these are too strict for now
+            commented_code_linter = NULL,
+            cyclocomp_linter = NULL
+          )
+          result <- lint_package(linters = linters, exclusions = exclusions)
+          result
         shell: Rscript {0}
-        with:
-          LINTR_COMMENT_BOT=true
-
-# library(lintr)
-# undesirableFunctions <- with_defaults(
-#   default   = lintr::default_undesirable_functions,
-#   "sapply"  = "use vapply or purrr::map_<type>",
-#   ".v"      = "remove it",
-#   ".unv"    = "remove it",
-#   "options" = NULL
-# )
-# linters <- with_defaults(
-#   line_length_linter = line_length_linter(180),
-#   object_length_linter(50L),
-#   object_name_linter("camelCase"),
-#   undesirable_function_linter(undesirableFunctions),
-#   # these are too strict for now
-#   commented_code_linter = NULL,
-#   cyclocomp_linter = NULL
-# )
-# result <- lint_package(linters = linters)
-# result
-
-# names(result)
-# table(sapply(result, `[[`, "linter"))
-
-# Filter(function(x) x$linter %in% c("object_length_linter"), result)
-# Filter(function(x) x$linter %in% c("undesirable_function_linter"), result)
