@@ -158,8 +158,8 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const nodeFetch = require('node-fetch');
-            nodeFetch.fetch('formattedString.txt')
+            import fetch from "node-fetch";
+            fetch('formattedString.txt')
               .then(response => response.text())
               .then(text => console.log(text))
 
