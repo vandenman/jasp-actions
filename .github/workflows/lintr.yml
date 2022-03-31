@@ -97,12 +97,12 @@ jobs:
           }
           
           formattedString <- formatLintResultByLinter(result)
-          cat(formattedString)
-          envFile <- Sys.getenv("GITHUB_ENV")
-          cat(sprintf("\n\n\ntrying to write to %s", envFile))
-          con <- file(envFile, open = "a")
-          writeLines(sprintf("{lintrResults}={%s}", formattedString), con = con)
-          close(con)
+          #cat(formattedString)
+          #envFile <- Sys.getenv("GITHUB_ENV")
+          #cat(sprintf("\n\n\ntrying to write to %s", envFile))
+          #con <- file(envFile, open = "a")
+          #writeLines(sprintf("{lintrResults}={%s}", formattedString), con = con)
+          #close(con)
           
           # based on https://trstringer.com/github-actions-multiline-strings/
           cmd <- sprintf('
