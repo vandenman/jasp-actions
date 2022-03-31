@@ -100,7 +100,7 @@ jobs:
           cat(formattedString)
           envFile <- Sys.getenv("GITHUB_ENV")
           cat(sprintf("\n\n\ntrying to write to %s", envFile))
-          file(ttt, open = "a")
+          con <- file(envFile, open = "a")
           writeLines(sprintf("{lintrResults}={%s}", formattedString), con = con)
           close(con)
           #cat(sprintf("{lintrResults}={%s}", formattedString), file = envFile, append = TRUE)
