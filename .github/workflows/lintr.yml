@@ -25,17 +25,7 @@ jobs:
 
       - name: Lint
         id: lint
-        run: |
-          # looking around
-          pprint <- function(path) {
-            path <- normalizePath(path)
-            cat(path, ":\n", sep = "")
-            cat(dir(path))
-          }
-          pprint(getwd())
-          pprint(file.path(getwd(), ".."))
-          pprint(file.path(getwd(), "..", ".."))
-          
+        run: |         
           library(lintr)
 
           undesirableFunctions <- with_defaults(
@@ -67,6 +57,12 @@ jobs:
             linterTypes <- vapply(lintResult, FUN.VALUE = character(1L), `[[`, "linter")
             splitX <- split(lintResult, linterTypes)
             
+            filenameToLink <- if (forGitHub) {
+                # TODO: check if github.actor is correct when someone retriggers a branch?
+                base <- "${{ github.server_url }}/${{ github.repository }}/blob/${{ github.sha }}/%s"
+                print(paste("url base is", base))
+                function(x) sprintf(base, x)
+            } else identity
             bold <- if (forGitHub) paste else crayon::bold
             formattedString <- ""
             for (i in seq_along(splitX)) {
@@ -101,19 +97,24 @@ jobs:
           }
           
           formattedString <- formatLintResultByLinter(result)
+          cat(formattedString)
+          envFile <- Sys.getenv("GITHUB_ENV")
+          cat(sprintf("{lintrResults}={%s}", formattedString), file = envFile)
           #cmd <- sprintf('echo "{lintrResults}={%s}" >> $GITHUB_ENV', formattedString)
-          cmd <- sprintf('echo "::set-output name=lintrResults::%s"', formattedString)
-          cat(cmd)
-          system(cmd)
+          #cmd <- sprintf('echo "::set-output name=lintrResults::%s"', formattedString)
+          #cat(cmd)
+          #system(cmd)
           
           result
-        shell: Rscript {0}
+        shell: Rscript {0}     
+      - run: echo "${{ env.lintrResults }}"
+
 
       - name: Update initial comment
         uses: actions/github-script@v6
         with:
           script: |
-            body = "${{ steps.lint.outputs.lintrResults }}";
+            body = "${{ env.lintrResults }}";
             console.log(body);
             if (body != "") {
               github.rest.issues.createComment({
