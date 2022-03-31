@@ -129,7 +129,7 @@ jobs:
 
       - name: fail if linter result is a non-empty string
         run: |
-          if [ -z "${}" ]; then
+          if [ -z "${{ steps.lint.outputs.lintrResults }}" ]; then
             exit 1
           fi
         shell: bash
