@@ -116,27 +116,27 @@ jobs:
           
           cat(formattedString, file = "formattedString.txt")
           
-          splitInParts <- function(string, size = 1000) {
-            pat <- paste0('(?<=.{', size, '})')
-            strsplit(string, pat, perl = TRUE)[[1L]]
-          }
-          formattedStringSplit <- splitInParts(formattedString)
-          print(length(formattedStringSplit))
+          #splitInParts <- function(string, size = 1000) {
+          #  pat <- paste0('(?<=.{', size, '})')
+          #  strsplit(string, pat, perl = TRUE)[[1L]]
+          #}
+          #formattedStringSplit <- splitInParts(formattedString)
+          #print(length(formattedStringSplit))
 
-          system(        'echo "lintrResults2<<EOF" >> $GITHUB_ENV')
-          for (str in formattedStringSplit) {
-            system(sprintf('echo "%s" >> $GITHUB_ENV', str))
-          }
-          system(        'echo "EOF" >> $GITHUB_ENV')
+          #system(        'echo "lintrResults2<<EOF" >> $GITHUB_ENV')
+          #for (str in formattedStringSplit) {
+          #  system(sprintf('echo "%s" >> $GITHUB_ENV', str))
+          #}
+          #system(        'echo "EOF" >> $GITHUB_ENV')
           
           # based on https://renehernandez.io/snippets/multiline-strings-as-a-job-output-in-github-actions/
-          formattedString <- gsub("%",  "%25", formattedString)
-          formattedString <- gsub("\n", "%0A", formattedString)
-          formattedString <- gsub("\r", "%0D", formattedString)
+          #formattedString <- gsub("%",  "%25", formattedString)
+          #formattedString <- gsub("\n", "%0A", formattedString)
+          #formattedString <- gsub("\r", "%0D", formattedString)
 
-          cmd <- sprintf('echo "{lintrResults}={%s}" >> $GITHUB_ENV', formattedString)
-          cat(cmd)
-          system(cmd)
+          #cmd <- sprintf('echo "{lintrResults}={%s}" >> $GITHUB_ENV', formattedString)
+          #cat(cmd)
+          #system(cmd)
           
           
           #cat(sprintf("{lintrResults}={%s}", formattedString), file = envFile, append = TRUE)
@@ -147,21 +147,28 @@ jobs:
           
           result
         shell: Rscript {0}
+        
+      - name: Set the value
+        id: step_one
+        run: |
+          echo "action_state=yellow" >> $GITHUB_ENV
+      - name: Use the value
+        id: step_two
+        run: |
+          echo "${{ env.action_state }}" # This will output 'yellow'
       
       - name: put linter output into environment
         run: |
-          cat "formattedString.txt"
+          cat 'formattedString.txt'
           echo
-          echo "lintrResults3<<EOF" >> $GITHUB_ENV
-          cat "formattedString.txt" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
+          echo 'lintrResults<<EOF' >> $GITHUB_ENV
+          cat 'formattedString.txt' >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
         shell: bash
       
       - name: display linter output
         run: |
           echo "The output is: ${{ env.lintrResults }}"
-          echo "The output is: ${{ env.lintrResults2 }}"
-          echo "The output is: ${{ env.lintrResults3 }}"
         shell: bash
 
 
