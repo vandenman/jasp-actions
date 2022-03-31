@@ -24,6 +24,7 @@ jobs:
           extra-packages: lintr
 
       - name: Lint
+        id: lint
         run: |
           # looking around
           pprint <- function(path) {
@@ -100,7 +101,8 @@ jobs:
           }
           
           formattedString <- formatLintResultByLinter(result)
-          cmd <- sprintf('echo "{lintrResults}={%s}" >> $GITHUB_ENV', formattedString)
+          #cmd <- sprintf('echo "{lintrResults}={%s}" >> $GITHUB_ENV', formattedString)
+          cmd <- sprintf('echo "::set-output name=lintrResults::%s"', formattedString)
           cat(cmd)
           system(cmd)
           
@@ -111,7 +113,7 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            body = "${{ env.lintrResults }}";
+            body = "${{ steps.lint.outputs.lintrResults }}";
             console.log(body);
             if (body != "") {
               github.rest.issues.createComment({
