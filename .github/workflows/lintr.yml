@@ -82,18 +82,20 @@ jobs:
             }
             formattedString
           }
-          cmd <- sprintf('echo "{environment_variable_name}={%s}" >> $GITHUB_ENV', formattedString)
+          
+          formattedString <- formatLintResultByLinter(result)
+          cmd <- sprintf('echo "{lintrResults}={%s}" >> $GITHUB_ENV', formattedString)
           cat(cmd)
           system(cmd)
-
-          result         
+          
+          result
         shell: Rscript {0}
 
       - name: Update initial comment
         uses: actions/github-script@v6
         with:
           script: |
-            body = "${{ env.action_state }}";
+            body = "${{ env.lintrResults }}";
             console.log(body);
             if (body != "") {
               github.rest.issues.createComment({
@@ -106,4 +108,10 @@ jobs:
                   body: "lintr found the following issues:\n\n".concat(body)
               });
             }
- 
+
+      - name: fail on non-empty string
+        run: |
+          if [ -z "${}" ]; then
+            exit 1
+          fi
+        shell: bash
