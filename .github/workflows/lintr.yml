@@ -161,9 +161,11 @@ jobs:
         run: |
           cat 'formattedString.txt'
           echo
-          echo 'lintrResults<<EOF' >> $GITHUB_ENV
-          cat 'formattedString.txt' >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
+          {
+            echo 'lintrResults<<EOF_LINT_RESULTS'
+            cat 'formattedString.txt'
+            echo 'EOF_LINT_RESULTS'
+          }  >> "$GITHUB_ENV"
         shell: bash
       
       - name: display linter output
