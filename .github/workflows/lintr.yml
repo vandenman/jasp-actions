@@ -114,6 +114,8 @@ jobs:
           #cat("\n\n")
           #system(cmd)
           
+          cat(formattedString, file = "formattedString.txt")
+          
           splitInParts <- function(string, size = 1000) {
             pat <- paste0('(?<=.{', size, '})')
             strsplit(string, pat, perl = TRUE)[[1L]]
@@ -136,6 +138,7 @@ jobs:
           cat(cmd)
           system(cmd)
           
+          
           #cat(sprintf("{lintrResults}={%s}", formattedString), file = envFile, append = TRUE)
           #cmd <- sprintf('echo "{lintrResults}={%s}" >> $GITHUB_ENV', formattedString)
           #cmd <- sprintf('echo "::set-output name=lintrResults::%s"', formattedString)
@@ -144,11 +147,21 @@ jobs:
           
           result
         shell: Rscript {0}
-        
+      
+      - name: put linter output into environment
+        run: |
+          cat "formattedString.txt"
+          echo
+          echo "lintrResults3<<EOF" >> $GITHUB_ENV
+          cat "formattedString.txt" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+        shell: bash
+      
       - name: display linter output
         run: |
           echo "The output is: ${{ env.lintrResults }}"
           echo "The output is: ${{ env.lintrResults2 }}"
+          echo "The output is: ${{ env.lintrResults3 }}"
         shell: bash
 
 
