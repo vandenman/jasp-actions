@@ -57,12 +57,11 @@ jobs:
             linterTypes <- vapply(lintResult, FUN.VALUE = character(1L), `[[`, "linter")
             splitX <- split(lintResult, linterTypes)
             
-            filenameToLink <- if (forGitHub) {
+            if (forGitHub) {
                 # TODO: check if github.actor is correct when someone retriggers a branch?
-                base <- "${{ github.server_url }}/${{ github.repository }}/blob/${{ github.sha }}/%s"
+                base <- "${{ github.server_url }}/${{ github.repository }}/blob/${{ github.sha }}"
                 print(paste("url base is", base))
-                function(x) sprintf(base, x)
-            } else identity
+            }
             bold <- if (forGitHub) paste else crayon::bold
             formattedString <- ""
             for (i in seq_along(splitX)) {
@@ -79,6 +78,7 @@ jobs:
                 badCode  <- paste0(x$line, "\n", lintr:::highlight_string(x$message, x$column_number, x$ranges))
                 
                 if (forGitHub) {
+                  lineInfo <- sprintf("[%s](${{ github.server_url }}/${{ github.repository }}/blob/${{ github.sha }}/%s#L%s)", lineInfo, x$filename, x$line_number)
                   formattedString <- paste0(formattedString, "\n", lineInfo, "\n```r\n", badCode, "\n```")
                 } else {
                   formattedString <- paste0(formattedString, "\n", lineInfo, "\n", badCode)
@@ -103,6 +103,17 @@ jobs:
           con <- file(envFile, open = "a")
           writeLines(sprintf("{lintrResults}={%s}", formattedString), con = con)
           close(con)
+          
+          # based on https://trstringer.com/github-actions-multiline-strings/
+          cmd <- sprintf('
+            echo "lintrResults<<EOF" >> $GITHUB_ENV && 
+            echo "%s" >> $GITHUB_ENV &&
+            echo "EOF" >> $GITHUB_ENV
+          ', formattedString)
+          cat(cmd)
+          cat("\n\n")
+          system(cmd)
+          
           #cat(sprintf("{lintrResults}={%s}", formattedString), file = envFile, append = TRUE)
           #cmd <- sprintf('echo "{lintrResults}={%s}" >> $GITHUB_ENV', formattedString)
           #cmd <- sprintf('echo "::set-output name=lintrResults::%s"', formattedString)
@@ -110,8 +121,12 @@ jobs:
           #system(cmd)
           
           result
-        shell: Rscript {0}     
-      - run: echo "${{ env.lintrResults }}"
+        shell: Rscript {0}
+        
+      - name: display linter output
+        run: |
+          echo "The output is: ${{ env.lintrResults }}"
+        shell: bash
 
 
       - name: Update initial comment
