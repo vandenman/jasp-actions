@@ -25,6 +25,16 @@ jobs:
 
       - name: Lint
         run: |
+          # looking around
+          pprint <- function(path) {
+            path <- normalizePath(path)
+            cat(path, ":\n", sep = "")
+            cat(dir(path))
+          }
+          pprint(getwd())
+          pprint(file.path(getwd(), ".."))
+          pprint(file.path(getwd(), "..", ".."))
+          
           library(lintr)
 
           undesirableFunctions <- with_defaults(
@@ -50,5 +60,50 @@ jobs:
             cyclocomp_linter = NULL
           )
           result <- lint_package(linters = linters, exclusions = exclusions)
-          result
+          
+          formatLintResultByLinter <- function(lintResult) {
+  
+            linterTypes <- vapply(lintResult, FUN.VALUE = character(1L), `[[`, "linter")
+            splitX <- split(lintResult, linterTypes)
+  
+            formattedString <- ""
+            for (i in seq_along(splitX)) {
+              color <- switch(splitX[[i]][[1L]]$type, warning = crayon::magenta, error = crayon::red, style = crayon::blue, crayon::bold)
+              formattedString <- paste0(formattedString, color(splitX[[i]][[1L]]$type, ": ", sep = ""), crayon::bold(splitX[[i]][[1L]]$message))
+              for (x in splitX[[i]]) {
+                # adapted from lintr:::print.lint
+      
+                lineInfo <- paste0(crayon::bold(x$filename, ":", as.character(x$line_number), ":", as.character(x$column_number), ": ", sep = ""))
+                badCode  <- paste0(x$line, "\n", lintr:::highlight_string(x$message, x$column_number, x$ranges))
+      
+                formattedString <- paste0(formattedString, "\n", lineInfo, "\n", badCode)
+              }
+              formattedString <- paste0(formattedString, "\n\n")
+            }
+            formattedString
+          }
+          cmd <- sprintf('echo "{environment_variable_name}={%s}" >> $GITHUB_ENV', formattedString)
+          cat(cmd)
+          system(cmd)
+
+          result         
         shell: Rscript {0}
+
+      - name: Update initial comment
+        uses: actions/github-script@v6
+        with:
+          script: |
+            body = "${{ env.action_state }}";
+            console.log(body);
+            if (body != "") {
+              github.rest.issues.createComment({
+                  issue_number: context.issue.number,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  //owner: context.repo.owner,
+                  //repo: context.repo.repo,
+                  //comment_id: ${{ github.event.comment.id }},
+                  body: "lintr found the following issues:\n\n".concat(body)
+              });
+            }
+ 
