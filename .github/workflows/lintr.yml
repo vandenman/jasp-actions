@@ -113,8 +113,18 @@ jobs:
           #cat(cmd)
           #cat("\n\n")
           #system(cmd)
+          
+          splitInParts <- function(string, size = 1000) {
+            pat <- paste0('(?<=.{', size, '})')
+            strsplit(string, pat, perl = TRUE)[[1L]]
+          }
+          formattedStringSplit <- splitInParts(formattedString)
+          print(length(formattedStringSplit))
+
           system(        'echo "lintrResults2<<EOF" >> $GITHUB_ENV')
-          system(sprintf('echo "%s" >> $GITHUB_ENV', formattedString))
+          for (str in formattedStringSplit) {
+            system(sprintf('echo "%s" >> $GITHUB_ENV', str))
+          }
           system(        'echo "EOF" >> $GITHUB_ENV')
           
           # based on https://renehernandez.io/snippets/multiline-strings-as-a-job-output-in-github-actions/
