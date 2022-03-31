@@ -1,0 +1,57 @@
+name: Reusable workflow for linting R code in JASP modules
+
+on:
+  workflow_call:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+
+      - uses: actions/checkout@v2
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+          r-version: '4.1.3'
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: lintr
+
+      - name: Lint
+        run: |
+          lintr::lint_package(
+            linters = lintr::
+          )
+        shell: Rscript {0}
+        with:
+          LINTR_COMMENT_BOT=true
+
+# library(lintr)
+# undesirableFunctions <- with_defaults(
+#   default   = lintr::default_undesirable_functions,
+#   "sapply"  = "use vapply or purrr::map_<type>",
+#   ".v"      = "remove it",
+#   ".unv"    = "remove it",
+#   "options" = NULL
+# )
+# linters <- with_defaults(
+#   line_length_linter = line_length_linter(180),
+#   object_length_linter(50L),
+#   object_name_linter("camelCase"),
+#   undesirable_function_linter(undesirableFunctions),
+#   # these are too strict for now
+#   commented_code_linter = NULL,
+#   cyclocomp_linter = NULL
+# )
+# result <- lint_package(linters = linters)
+# result
+
+# names(result)
+# table(sapply(result, `[[`, "linter"))
+
+# Filter(function(x) x$linter %in% c("object_length_linter"), result)
+# Filter(function(x) x$linter %in% c("undesirable_function_linter"), result)
