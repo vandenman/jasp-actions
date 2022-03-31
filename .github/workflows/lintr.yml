@@ -148,20 +148,18 @@ jobs:
           result
         shell: Rscript {0}
         
-      - name: Set the value
-        id: step_one
-        run: |
-          echo "action_state=yellow" >> $GITHUB_ENV
-      - name: Use the value
-        id: step_two
-        run: |
-          echo "${{ env.action_state }}" # This will output 'yellow'
-          
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14
+      - run: npm install node-fetch
+
       - name: print file from githubscript
         uses: actions/github-script@v6
         with:
           script: |
-            fetch('formattedString.txt')
+            const nodeFetch = require('node-fetch');
+            nodeFetch.fetch('formattedString.txt')
               .then(response => response.text())
               .then(text => console.log(text))
 
