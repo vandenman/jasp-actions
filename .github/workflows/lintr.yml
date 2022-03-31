@@ -61,24 +61,40 @@ jobs:
           )
           result <- lint_package(linters = linters, exclusions = exclusions)
           
-          formatLintResultByLinter <- function(lintResult) {
-  
+          formatLintResultByLinter <- function(lintResult, forGitHub = TRUE) {
+            
             linterTypes <- vapply(lintResult, FUN.VALUE = character(1L), `[[`, "linter")
             splitX <- split(lintResult, linterTypes)
-  
+            
+            bold <- if (forGitHub) paste else crayon::bold
             formattedString <- ""
             for (i in seq_along(splitX)) {
-              color <- switch(splitX[[i]][[1L]]$type, warning = crayon::magenta, error = crayon::red, style = crayon::blue, crayon::bold)
-              formattedString <- paste0(formattedString, color(splitX[[i]][[1L]]$type, ": ", sep = ""), crayon::bold(splitX[[i]][[1L]]$message))
+              if (forGitHub) {
+                formattedString <- paste0(formattedString, "<details>\n<summary>", splitX[[i]][[1L]]$type, ": ", splitX[[i]][[1L]]$message, "</summary>\n")
+              } else {
+                color <- switch(splitX[[i]][[1L]]$type, warning = crayon::magenta, error = crayon::red, style = crayon::blue, crayon::bold)
+                formattedString <- paste0(formattedString, color(splitX[[i]][[1L]]$type, ": ", sep = ""), crayon::bold(splitX[[i]][[1L]]$message))
+              }
               for (x in splitX[[i]]) {
                 # adapted from lintr:::print.lint
       
-                lineInfo <- paste0(crayon::bold(x$filename, ":", as.character(x$line_number), ":", as.character(x$column_number), ": ", sep = ""))
+                lineInfo <- paste0(bold(x$filename, ":", as.character(x$line_number), ":", as.character(x$column_number), ": ", sep = ""))
                 badCode  <- paste0(x$line, "\n", lintr:::highlight_string(x$message, x$column_number, x$ranges))
-      
-                formattedString <- paste0(formattedString, "\n", lineInfo, "\n", badCode)
+                
+                if (forGitHub) {
+                  formattedString <- paste0(formattedString, "\n", lineInfo, "\n```r\n", badCode, "\n```")
+                } else {
+                  formattedString <- paste0(formattedString, "\n", lineInfo, "\n", badCode)
+                }
               }
+              if (forGitHub) {
+                formattedString <- paste0(formattedString, "\n</details>")
+              } 
               formattedString <- paste0(formattedString, "\n\n")
+            }
+          
+            if (formattedString != "") {
+              formattedString <- paste0("The linter found the following issues:\n\n<details>\n<summary>List of issues</summary>\n", formattedString, "</details>")
             }
             formattedString
           }
@@ -105,11 +121,11 @@ jobs:
                   //owner: context.repo.owner,
                   //repo: context.repo.repo,
                   //comment_id: ${{ github.event.comment.id }},
-                  body: "lintr found the following issues:\n\n".concat(body)
+                  body: "body"
               });
             }
 
-      - name: fail on non-empty string
+      - name: fail if linter result is a non-empty string
         run: |
           if [ -z "${}" ]; then
             exit 1
