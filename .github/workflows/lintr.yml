@@ -105,13 +105,25 @@ jobs:
           #close(con)
           
           # based on https://trstringer.com/github-actions-multiline-strings/
-          cmd <- sprintf('
-            echo "lintrResults<<EOF" >> $GITHUB_ENV && 
-            echo "%s" >> $GITHUB_ENV &&
-            echo "EOF" >> $GITHUB_ENV
-          ', formattedString)
+          #cmd <- sprintf('
+          #  echo "lintrResults2<<EOF" >> $GITHUB_ENV && 
+          #  echo "%s" >> $GITHUB_ENV &&
+          #  echo "EOF" >> $GITHUB_ENV
+          #', formattedString)
+          #cat(cmd)
+          #cat("\n\n")
+          #system(cmd)
+          system(        'echo "lintrResults2<<EOF" >> $GITHUB_ENV')
+          system(sprintf('echo "%s" >> $GITHUB_ENV', formattedString)
+          system(        'echo "EOF" >> $GITHUB_ENV')
+          
+          # based on https://renehernandez.io/snippets/multiline-strings-as-a-job-output-in-github-actions/
+          formattedString <- gsub("%",  "%25", formattedString)
+          formattedString <- gsub("\n", "%0A", formattedString)
+          formattedString <- gsub("\r", "%0D", formattedString)
+
+          cmd <- sprintf('echo "{lintrResults}={%s}" >> $GITHUB_ENV', formattedString)
           cat(cmd)
-          cat("\n\n")
           system(cmd)
           
           #cat(sprintf("{lintrResults}={%s}", formattedString), file = envFile, append = TRUE)
@@ -126,6 +138,7 @@ jobs:
       - name: display linter output
         run: |
           echo "The output is: ${{ env.lintrResults }}"
+          echo "The output is: ${{ env.lintrResults2 }}"
         shell: bash
 
 
@@ -140,10 +153,7 @@ jobs:
                   issue_number: context.issue.number,
                   owner: context.repo.owner,
                   repo: context.repo.repo,
-                  //owner: context.repo.owner,
-                  //repo: context.repo.repo,
-                  //comment_id: ${{ github.event.comment.id }},
-                  body: "body"
+                  body: body
               });
             }
 
