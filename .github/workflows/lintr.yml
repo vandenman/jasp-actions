@@ -114,7 +114,7 @@ jobs:
           #cat("\n\n")
           #system(cmd)
           system(        'echo "lintrResults2<<EOF" >> $GITHUB_ENV')
-          system(sprintf('echo "%s" >> $GITHUB_ENV', formattedString)
+          system(sprintf('echo "%s" >> $GITHUB_ENV', formattedString))
           system(        'echo "EOF" >> $GITHUB_ENV')
           
           # based on https://renehernandez.io/snippets/multiline-strings-as-a-job-output-in-github-actions/
