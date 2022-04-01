@@ -5,6 +5,10 @@ on:
 
 jobs:
   lint:
+  
+    # avoid duplicate runs on a pull request that is also a push, see https://github.community/t/duplicate-checks-on-push-and-pull-request-simultaneous-event/18012/5
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
+
     runs-on: ubuntu-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
