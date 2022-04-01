@@ -106,9 +106,8 @@ jobs:
           formattedString <- gsub("`", "\\`", formattedString, fixed = TRUE)
           
           con <- file(description = Sys.getenv("GITHUB_ENV"), open = "a")
-          print(con)
-          cat("LINTER_RESULTS<<LINTER_RESULTS_EOF", file = con)
-          cat(formattedString, file = con)
+          cat("LINTER_RESULTS<<LINTER_RESULTS_EOF\n", file = con, sep = "")
+          cat(formattedString, "\n", file = con, sep = "")
           cat("LINTER_RESULTS_EOF", file = con)
           close(con)
           
