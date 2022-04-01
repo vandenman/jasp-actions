@@ -104,6 +104,7 @@ jobs:
           formattedString <- gsub("$", "\\$", formattedString, fixed = TRUE)
 
           cmd <- sprintf("LINTER_RESULTS=$(cat << EOF\n%s\nEOF\n) && echo $LINTER_RESULTS", formattedString)
+          system(cmd)
 
           #cat(formattedString)
           #envFile <- Sys.getenv("GITHUB_ENV")
