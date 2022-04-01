@@ -105,11 +105,18 @@ jobs:
           # javascript has issues with '`'
           formattedString <- gsub("`", "\\`", formattedString, fixed = TRUE)
           
-          Sys.setenv(LINTER_RESULTS=formattedString)
-          system('echo "LINTER_RESULTS<<EOF" >> $GITHUB_ENV')
-          system('echo "$LINTER_RESULTS" >> $GITHUB_ENV')
-          system('echo "EOF" >> $GITHUB_ENV')
-                  
+          con <- file(description = Sys.getenv("GITHUB_ENV"), open = "a")
+          print(con)
+          cat("LINTER_RESULTS<<LINTER_RESULTS_EOF", file = con)
+          cat(formattedString, file = con)
+          cat("LINTER_RESULTS_EOF", file = con)
+          close(con)
+          
+          #Sys.setenv(LINTER_RESULTS=formattedString)
+          #system('echo "LINTER_RESULTS<<EOF" >> $GITHUB_ENV')
+          #system('echo "$LINTER_RESULTS" >> $GITHUB_ENV')
+          #system('echo "EOF" >> $GITHUB_ENV')
+          
           result
         shell: Rscript {0}
        
