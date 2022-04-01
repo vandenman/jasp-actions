@@ -103,13 +103,19 @@ jobs:
           
           formattedString <- formatLintResultByLinter(result[1:5])
           
+          Sys.setenv(LINTER_RESULTS=formattedString)
+          system('echo "LINTER_RESULTS<<EOF" >> $GITHUB_ENV')
+          system('echo "$LINTER_RESULTS" >> $GITHUB_ENV')
+          system('echo "EOF" >> $GITHUB_ENV')
+          
           # escape things bash cannot handle
-          formattedString <- gsub("(", "\\(", formattedString, fixed = TRUE)
-          formattedString <- gsub(")", "\\)", formattedString, fixed = TRUE)
-          formattedString <- gsub("$", "\\$", formattedString, fixed = TRUE)
+          #formattedString <- gsub("(", "\\(", formattedString, fixed = TRUE)
+          #formattedString <- gsub(")", "\\)", formattedString, fixed = TRUE)
+          #formattedString <- gsub("$", "\\$", formattedString, fixed = TRUE)
 
-          cmd <- sprintf("LINTER_RESULTS=$(cat << EOF\n%s\nEOF\n) && echo $LINTER_RESULTS", formattedString)
-          system(cmd)
+          #cmd <- sprintf("LINTER_RESULTS=$(cat << EOF\n%s\nEOF\n) && echo $LINTER_RESULTS", formattedString)
+          #cat(cmd)
+          #system(cmd)
 
           #cat(formattedString)
           #envFile <- Sys.getenv("GITHUB_ENV")
