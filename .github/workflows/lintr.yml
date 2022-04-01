@@ -57,10 +57,15 @@ jobs:
           )
           result <- lint_package(linters = linters, exclusions = exclusions)
           
-          formatLintResultByLinter <- function(lintResult, forGitHub = TRUE) {
+          formatLintResultByLinter <- function(lintResult, forGitHub = TRUE, max = 100) {
+            
+            # `max` is there because a too long comment crashes GitHub Actions
             
             linterTypes <- vapply(lintResult, FUN.VALUE = character(1L), `[[`, "linter")
             splitX <- split(lintResult, linterTypes)
+            
+            count <- 0L
+            exitEarly <- FALSE
             
             if (forGitHub) {
                 # TODO: check if github.actor is correct when someone retriggers a branch?
@@ -88,20 +93,41 @@ jobs:
                 } else {
                   formattedString <- paste0(formattedString, "\n", lineInfo, "\n", badCode)
                 }
+                
+                count <- count + 1L
+                if (count >= max) break
+                
               }
               if (forGitHub) {
                 formattedString <- paste0(formattedString, "\n</details>")
               } 
               formattedString <- paste0(formattedString, "\n\n")
+              
+              if (count >= max) {
+                exitEarly <- TRUE
+                break
+              }
+              
             }
           
             if (formattedString != "") {
-              formattedString <- paste0("The linter found the following issues:\n\n<details>\n<summary>List of issues</summary>\n", formattedString, "</details>")
+              if (exitEarly) {
+                formattedString <- sprintf(
+                  "The linter found %d issues. Showing %d out of %d issues:\n\n<details>\n<summary>List of issues</summary>\n%s</details>",
+                  length(lintResult), max, length(lintResult), formattedString
+                )
+              } else {
+                formattedString <- sprintf(
+                  "The linter found %d issues:\n\n<details>\n<summary>List of issues</summary>\n%s</details>",
+                  length(lintResult), formattedString
+                )
+              }
             }
             formattedString
           }
           
           formattedString <- formatLintResultByLinter(result)
+          
           # javascript has issues with '`'
           formattedString <- gsub("`", "\\`", formattedString, fixed = TRUE)
           
@@ -110,11 +136,6 @@ jobs:
           cat(formattedString, "\n", file = con, sep = "")
           cat("LINTER_RESULTS_EOF", file = con)
           close(con)
-          
-          #Sys.setenv(LINTER_RESULTS=formattedString)
-          #system('echo "LINTER_RESULTS<<EOF" >> $GITHUB_ENV')
-          #system('echo "$LINTER_RESULTS" >> $GITHUB_ENV')
-          #system('echo "EOF" >> $GITHUB_ENV')
           
           result
         shell: Rscript {0}
