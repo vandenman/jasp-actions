@@ -7,12 +7,13 @@ jobs:
   lint:
   
     # avoid duplicate runs on a pull request that is also a push, see https://github.community/t/duplicate-checks-on-push-and-pull-request-simultaneous-event/18012/5
-    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
+    # the check is inverted so that when a pr triggers both push and pr runs, the push run is skipped.
+    if: github.event_name != 'push' || github.event.pull_request.head.repo.full_name == github.repository
 
     runs-on: ubuntu-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-      LINTR_COMMENT_BOT: true # ${{ github.event_name == 'pull_request' && 'true' || 'false' }}
+      #LINTR_COMMENT_BOT: true # ${{ github.event_name == 'pull_request' && 'true' || 'false' }}
 
     steps:
 
