@@ -101,8 +101,8 @@ jobs:
             formattedString
           }
           
-          formattedString <- formatLintResultByLinter(result[1:5])
-          # javascript has issues with `
+          formattedString <- formatLintResultByLinter(result)
+          # javascript has issues with '`'
           formattedString <- gsub("`", "\\`", formattedString, fixed = TRUE)
           
           Sys.setenv(LINTER_RESULTS=formattedString)
@@ -112,30 +112,21 @@ jobs:
                   
           result
         shell: Rscript {0}
-             
-      - name: display linter output
-        run: |
-          echo "The output is: ${{ env.LINTER_RESULTS }}"
-        shell: bash
-
+       
       - name: Update initial comment
+        if: env.LINTER_RESULTS != ''
         uses: actions/github-script@v6
         with:
           script: |
-            body = `${{ env.LINTER_RESULTS }}`
-            if (body != "") {
-              console.log("trying to comment");
-              github.rest.issues.createComment({
-                  issue_number: context.issue.number,
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  body: body
-              });
-            }
+            github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: `${{ env.LINTER_RESULTS }}`
+            });
 
       - name: fail if linter result is a non-empty string
+        if: env.LINTER_RESULTS != ''
         run: |
-          if [ -n "${{ env.LINTER_RESULTS }}" ]; then
-            exit 1
-          fi
+          exit 1
         shell: bash
