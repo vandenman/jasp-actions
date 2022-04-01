@@ -102,6 +102,8 @@ jobs:
           }
           
           formattedString <- formatLintResultByLinter(result[1:5])
+          # javascript has issues with `
+          formattedString <- gsub("`", "\\`", formattedString, fixed = TRUE)
           
           Sys.setenv(LINTER_RESULTS=formattedString)
           system('echo "LINTER_RESULTS<<EOF" >> $GITHUB_ENV')
@@ -120,13 +122,14 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            if ("${{ env.LINTER_RESULTS }}" != "") {
-              console.log("commenting");
+            body = `${{ env.LINTER_RESULTS }}`
+            if (body != "") {
+              console.log("trying to comment");
               github.rest.issues.createComment({
                   issue_number: context.issue.number,
                   owner: context.repo.owner,
                   repo: context.repo.repo,
-                  body: "dit is een test"
+                  body: body
               });
             }
 
