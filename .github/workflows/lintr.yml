@@ -96,7 +96,15 @@ jobs:
             formattedString
           }
           
-          formattedString <- formatLintResultByLinter(result[1:50])
+          formattedString <- formatLintResultByLinter(result[1:5])
+          
+          # escape things bash cannot handle
+          formattedString <- gsub("(", "\\(", formattedString, fixed = TRUE)
+          formattedString <- gsub(")", "\\)", formattedString, fixed = TRUE)
+          formattedString <- gsub("$", "\\$", formattedString, fixed = TRUE)
+
+          cmd <- sprintf("LINTER_RESULTS=$(cat << EOF\n%s\nEOF\n) && echo $LINTER_RESULTS", formattedString)
+
           #cat(formattedString)
           #envFile <- Sys.getenv("GITHUB_ENV")
           #cat(sprintf("\n\n\ntrying to write to %s", envFile))
@@ -114,7 +122,7 @@ jobs:
           #cat("\n\n")
           #system(cmd)
           
-          cat(formattedString, file = "formattedString.txt")
+          #cat(formattedString, file = "formattedString.txt")
           
           #splitInParts <- function(string, size = 1000) {
           #  pat <- paste0('(?<=.{', size, '})')
@@ -147,46 +155,17 @@ jobs:
           
           result
         shell: Rscript {0}
-        
-
-      - uses: actions/setup-node@v2
-        with:
-          node-version: 14
-      - run: npm install node-fetch
-
-      - name: print file from githubscript
-        uses: actions/github-script@v6
-        with:
-          script: |
-            import fetch from "node-fetch";
-            fetch('formattedString.txt')
-              .then(response => response.text())
-              .then(text => console.log(text))
-
-      - name: put linter output into environment
-        run: |
-          cat 'formattedString.txt'
-          echo
-          {
-            echo 'lintrResults<<EOF_LINT_RESULTS'
-            echo $(cat 'formattedString.txt')
-            echo 'EOF_LINT_RESULTS'
-          }  >> "$GITHUB_ENV"
-        shell: bash
-      
+             
       - name: display linter output
         run: |
-          echo "The output is: ${{ env.lintrResults }}"
+          echo "The output is: ${{ env.LINTER_RESULTS }}"
         shell: bash
 
       - name: Update initial comment
         uses: actions/github-script@v6
         with:
           script: |
-            fetch('formattedString.txt')
-              .then(response => response.text())
-              .then(text => console.log(text))
-            body = "${{ env.lintrResults }}";
+            body = "${{ env.LINTER_RESULTS }}";
             console.log(body);
             if (body != "") {
               github.rest.issues.createComment({
@@ -199,7 +178,7 @@ jobs:
 
       - name: fail if linter result is a non-empty string
         run: |
-          if [ -z "${{ steps.lint.outputs.lintrResults }}" ]; then
+          if [ -n "${{ env.LINTER_RESULTS }}" ]; then
             exit 1
           fi
         shell: bash
