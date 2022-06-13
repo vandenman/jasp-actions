@@ -14,7 +14,7 @@ runs:
       shell: bash
 
     - name: install dependencies
-      run: sudo apt install gettext qttools5-dev-tools
+      run: sudo apt install gettext qttools6-dev-tools
       shell: bash
 
     - name: generate Language Files
