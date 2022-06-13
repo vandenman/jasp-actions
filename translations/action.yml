@@ -12,9 +12,21 @@ runs:
     - name: Find and merge weblate pull requests
       run: ${{ github.action_path }}/findAndMergeWeblate.sh $GITHUB_REPOSITORY
       shell: bash
+      
+    - name: install Qt6
+      uses: jurplel/install-qt-action@v2
+      version: 6.2.3
+      dir: '${{ github.workspace }}/Qt/'
+      
+    - name: Test Qt installation
+      run: |
+        echo "${{ github.workspace }}/Qt/6.2.3/gcc_64/bin/lupdate"
+        which ${{ github.workspace }}/Qt/6.2.3/gcc_64/bin/lupdate
+        ${{ github.workspace }}/Qt/6.2.3/gcc_64/bin/lupdate
+      shell: bash
 
     - name: install dependencies
-      run: sudo apt install gettext qt5-default qttools5-dev-tools
+      run: sudo apt install gettext
       shell: bash
 
     - name: generate Language Files
@@ -28,6 +40,6 @@ runs:
       run: ${{ github.action_path }}/updateUpstream.sh
       shell: bash
       
-    - name: Reset and unlock weblate repos
-      run: ${{ github.action_path }}/unlockWeblate.sh
-      shell: bash
+#    - name: Reset and unlock weblate repos
+#      run: ${{ github.action_path }}/unlockWeblate.sh
+#      shell: bash
