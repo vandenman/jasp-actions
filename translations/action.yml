@@ -22,7 +22,13 @@ runs:
     - name: Test Qt installation
       run: |
         echo "${{ github.workspace }}/Qt/6.2.3/gcc_64/bin/lupdate"
+        echo "ls 1"
+        ls ${{ github.workspace }}/Qt/
+        echo "ls 2"
+        ls ${{ github.workspace }}/Qt/6.2.3/
+        echo "which"
         which ${{ github.workspace }}/Qt/6.2.3/gcc_64/bin/lupdate
+        echo "run"
         ${{ github.workspace }}/Qt/6.2.3/gcc_64/bin/lupdate
       shell: bash
 
