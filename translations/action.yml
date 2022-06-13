@@ -15,8 +15,9 @@ runs:
       
     - name: install Qt6
       uses: jurplel/install-qt-action@v2
-      version: 6.2.3
-      dir: '${{ github.workspace }}/Qt/'
+      with:
+        version: 6.2.3
+        dir: '${{ github.workspace }}/Qt/'
       
     - name: Test Qt installation
       run: |
