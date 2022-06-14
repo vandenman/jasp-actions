@@ -21,7 +21,6 @@ runs:
       uses: jurplel/install-qt-action@v2
       with:
         version: 6.2.3
-        dir: '${{ github.workspace }}/'
         
     - name: generate Language Files
       run: |
