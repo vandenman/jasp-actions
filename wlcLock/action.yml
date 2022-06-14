@@ -5,7 +5,7 @@ runs:
   using: "composite"
   steps:
       - name: Install wlc
-        run: pip3 install wlc
+        run: sudo apt -y install wlc
         shell: bash
         
       - name: Lock weblate repos
