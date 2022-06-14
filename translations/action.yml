@@ -14,9 +14,15 @@ runs:
       shell: bash
 
     - name: install dependencies
-      run: sudo apt install gettext qt5-default qttools5-dev-tools
+      run: sudo apt install gettext
       shell: bash
-
+      
+    - name: install Qt6
+      uses: jurplel/install-qt-action@v2
+      with:
+        version: 6.2.3
+        dir: '${{ github.workspace }}/'
+        
     - name: generate Language Files
       run: |
         echo "Generating language files for module: $GITHUB_REPOSITORY"
