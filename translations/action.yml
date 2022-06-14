@@ -5,16 +5,12 @@ runs:
   using: "composite"
   steps:
   
-    - name: Install wlc
-      run: pip3 install wlc
+    - name: Install wlc and gettext
+      run: sudo apt -y install wlc gettext
       shell: bash
       
     - name: Find and merge weblate pull requests
       run: ${{ github.action_path }}/findAndMergeWeblate.sh $GITHUB_REPOSITORY
-      shell: bash
-
-    - name: install dependencies
-      run: sudo apt install gettext
       shell: bash
       
     - name: install Qt6
