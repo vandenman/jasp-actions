@@ -24,7 +24,7 @@ fi
 echo "$(git status)"
 echo "$(git commit -m 'updated translation files')"
 echo "$(git status)"
-echo "$(git push)"
+echo "$(git push --force)"
 echo "$(git status)"
 
 if [ $? = 0 ] ; then
