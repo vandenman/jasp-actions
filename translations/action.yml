@@ -18,6 +18,8 @@ runs:
       shell: bash
       
     - name: Find and merge weblate pull requests
+      env:
+        GH_TOKEN: ${{ env.REPO_KEY }}
       run: ${{ github.action_path }}/findAndMergeWeblate.sh $GITHUB_REPOSITORY
       shell: bash
       
