@@ -1,6 +1,7 @@
 lock_repo() {
    echo "lock $1"
    wlc --key $2 --url https://hosted.weblate.org/api/ commit jasp/$1
+   wlc --key $2 --url https://hosted.weblate.org/api/ push jasp/$1
    wlc --key $2 --url https://hosted.weblate.org/api/ lock jasp/$1
 }
 
