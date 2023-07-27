@@ -49,6 +49,10 @@ do
 		
 		if [ ${moduleName} = "jasp-desktop" ]
 		then
+  			# Use development branch for jasp-desktop 
+  			cd jasp-desktop
+     			git checkout development
+			cd ..
 			LANGUAGEFILE=${moduleName}/Desktop/po/jaspDesktop-${languageCode}.po
 			QMFILE=${moduleName}/Resources/Translations/jaspDesktop-${languageCode}.qm
 		else
