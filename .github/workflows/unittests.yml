@@ -115,7 +115,7 @@ jobs:
       - name: Install JAGS on macOS
         if: runner.os == 'macOS' && inputs.needs_JAGS
         run: |
-          rm '/usr/local/bin/gfortran'
+          # rm '/usr/local/bin/gfortran'
           brew install jags
         shell: bash
 
@@ -125,8 +125,9 @@ jobs:
           # ragg                                          requires libharfbuzz-dev libfribidi-dev 
           # credentials   (dependency of usethis)         requires libgit2-dev
           # curl          (dependency of usethis)         requires libcurl4-openssl-dev
+          # libicu   (dependency of igraph or stringi...) requires libicu libicu-dev
 
-          sudo apt install libharfbuzz-dev libfribidi-dev libgit2-dev libcurl4-openssl-dev
+          sudo apt install libharfbuzz-dev libfribidi-dev libgit2-dev libcurl4-openssl-dev libicu*
         shell: bash
 
       - name: Set environment variable to never compile packages on Windows and macOS
@@ -141,8 +142,9 @@ jobs:
           extra-packages: |
             any::rcmdcheck
             github::jasp-stats/jaspTools
+            vdiffr@1.0.5
           needs: check
-          cache-version: 2
+          cache-version: 3
 
       - name: Install JAGS on Linux
         if: runner.os == 'Linux' && inputs.needs_JAGS
