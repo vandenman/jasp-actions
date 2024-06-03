@@ -35,7 +35,7 @@ runs:
     - name: install Qt6
       uses: jurplel/install-qt-action@v3
       with:
-        version: 6.7.*
+        version: 6.4.*
         
     - name: generate Language Files
       run: |
