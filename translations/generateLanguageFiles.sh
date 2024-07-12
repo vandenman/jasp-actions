@@ -25,8 +25,11 @@ validate_module()
 for moduleName in ${MODULE_NAMES[@]}
 do
 	echo Module: ${moduleName}
+ 	
+ 	cd ${moduleName}
  	git pull
   	git status
+   	cd ..
 
 	if [ ${moduleName} = "jasp-desktop" ]
 	then
