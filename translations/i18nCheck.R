@@ -39,7 +39,7 @@ rErrorCalls <- subset(rPotData,
 jaspCheckPoFiles <- function(dir) {
   files <- list.files(path = dir, pattern = "^R-.*[.]po$",
                       full.names = TRUE, recursive = TRUE)
-  files <- files[!endsWith(files, "ta.po")]
+  #files <- files[!endsWith(files, "ta.po")]
   result <- matrix(character(), ncol = 5L, nrow = 0L)
   for (f in files) {
     errs <- tools::checkPoFile(f, strictPlural = startsWith(basename(f), "R-"))
