@@ -140,13 +140,13 @@ jobs:
         with:
           extra-packages: |
             any::rcmdcheck
-            github::jasp-stats/jaspTools
+            github::vandenman/jaspTools@local_actions
           needs: check
           cache-version: 3
 
       - name: Install JAGS on Linux
         if: runner.os == 'Linux' && inputs.needs_JAGS
-        run: sudo apt install jags
+        run: sudo apt-get -y install jags
         shell: bash
 
       - name: Setup jaspTools
