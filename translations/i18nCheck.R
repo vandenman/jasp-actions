@@ -20,9 +20,9 @@ rPotData <- potools::get_message_data(dir = ".", verbose = TRUE)
 
 # Get unreasonable usage of gettext from .R
 placeholderData <- subset(rPotData,
-                          grepl(pattern = "(.*%[a-zA-Z].*|.*%[0-9]*[a-zA-Z].*){2,}", msgid)  # match multiple placeholders > 2 times.
+                          grepl(pattern = "(.*%[a-zA-Z].*|.*%[.0-9]*[a-zA-Z].*){2,}", msgid)  # match multiple placeholders > 2 times.
                           & !grepl(pattern = "%%", msgid) # such '90%%' cases in gettextf
-                          |  grepl(pattern = "(.*%[a-zA-Z].*|.*%[0-9]*[a-zA-Z].*){3,}", msgid_plural), # match plural conditions (> 3 times?)
+                          |  grepl(pattern = "(.*%[a-zA-Z].*|.*%[.0-9]*[a-zA-Z].*){3,}", msgid_plural), # match plural conditions (> 3 times?)
                           select = c("file", "call", "line_number"))
 rEmptyCalls <- subset(rPotData,
                       grepl(pattern = "gettext(|f)\\(['\"]['\"]\\)", call),
@@ -31,10 +31,10 @@ templateMsgError <- subset(rPotData, grepl(pattern = "%\\d\\$", msgid)          
                            & (!grepl(pattern = "%1\\$", msgid) | grepl(pattern = "%[a-zA-Z]", msgid)), # match missing %1$ or %s is present
                            select = c("file", "call", "line_number"))
 rErrorCalls <- subset(rPotData,
-                      grepl(pattern = "^gettext\\(.*%.*\\)", call),
+                      grepl(pattern = "^gettext\\(.*%.*\\)", call),   # match single % inside gettext()
                       select = c("file", "call", "line_number"))
 rLinkEmbedded <- subset(rPotData,
-                      grepl(pattern = "(http|https)://", call),
+                      grepl(pattern = "(http|https)://", msgid),
                       select = c("file", "call", "line_number"))
 
 # Get po/mo compiling error of R, We customized the tools::checkPoFiles function
