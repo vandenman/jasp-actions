@@ -116,6 +116,14 @@ jobs:
         run: |
           # rm '/usr/local/bin/gfortran'
           brew install jags
+          # Find and Set JAGS Paths
+          JAGS_BIN=$(brew --prefix jags)/bin
+          echo "JAGS_ROOT=$(brew --prefix jags)" >> $GITHUB_ENV
+          echo "PATH=$JAGS_BIN:$PATH" >> $GITHUB_ENV
+          echo "PKG_CONFIG_PATH=$(brew --prefix jags)/lib/pkgconfig" >> $GITHUB_ENV
+          # Create Symlink for jags-terminal (if necessary)
+          sudo mkdir -p $(brew --prefix)/libexec
+          sudo ln -s $(brew --prefix jags)/bin/jags $(brew --prefix)/libexec/jags-terminal
         shell: bash
 
       - name: Install system dependencies on linux
