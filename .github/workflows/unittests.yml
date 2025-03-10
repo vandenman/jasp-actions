@@ -128,7 +128,7 @@ jobs:
           echo "DYLD_FALLBACK_LIBRARY_PATH=$(brew --prefix jags)/lib" >> $GITHUB_ENV
           echo "LD_LIBRARY_PATH=$(brew --prefix jags)/lib" >> $GITHUB_ENV
           # set JAGS_HOME
-          echo "JAGS_HOME=$(brew --prefix jags)/lib/JAGS" >> $GITHUB_ENV"
+          echo "JAGS_HOME=$(brew --prefix jags)/lib/JAGS" >> $GITHUB_ENV
         shell: bash
 
       - name: Debug Homebrew Path
