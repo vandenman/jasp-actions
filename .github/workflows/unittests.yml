@@ -127,13 +127,20 @@ jobs:
           # set fallbacks
           echo "DYLD_FALLBACK_LIBRARY_PATH=$(brew --prefix jags)/lib" >> $GITHUB_ENV
           echo "LD_LIBRARY_PATH=$(brew --prefix jags)/lib" >> $GITHUB_ENV
+          # set JAGS_HOME
+          echo "JAGS_HOME=$(brew --prefix jags)/lib/JAGS" >> $GITHUB_ENV"
         shell: bash
 
       - name: Debug Homebrew Path
         if: runner.os == 'macOS' && inputs.needs_JAGS
         run: |
           brew --prefix jags
+          echo 'ls -l $(brew --prefix jags)/lib'
           ls -l $(brew --prefix jags)/lib
+          echo 'ls -l $(brew --prefix jags)/lib/JAGS'
+          ls -l $(brew --prefix jags)/lib/JAGS
+          echo 'ls -l $JAGS_HOME'
+          ls -l $JAGS_HOME
 
       - name: Install system dependencies on linux
         if: runner.os == 'Linux'
