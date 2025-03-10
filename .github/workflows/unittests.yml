@@ -124,7 +124,16 @@ jobs:
           # Create Symlink for jags-terminal (if necessary)
           sudo mkdir -p $(brew --prefix)/libexec
           sudo ln -s $(brew --prefix jags)/bin/jags $(brew --prefix)/libexec/jags-terminal
+          # set fallbacks
+          echo "DYLD_FALLBACK_LIBRARY_PATH=$(brew --prefix jags)/lib" >> $GITHUB_ENV
+          echo "LD_LIBRARY_PATH=$(brew --prefix jags)/lib" >> $GITHUB_ENV
         shell: bash
+
+      - name: Debug Homebrew Path
+        if: runner.os == 'macOS' && inputs.needs_JAGS
+        run: |
+          brew --prefix jags
+          ls -l $(brew --prefix jags)/lib
 
       - name: Install system dependencies on linux
         if: runner.os == 'Linux'
