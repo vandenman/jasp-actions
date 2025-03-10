@@ -129,6 +129,9 @@ jobs:
           echo "LD_LIBRARY_PATH=$(brew --prefix jags)/lib" >> $GITHUB_ENV
           # set JAGS_HOME
           echo "JAGS_HOME=$(brew --prefix jags)/lib/JAGS" >> $GITHUB_ENV
+          # Symlink JAGS Modules for rjags
+          sudo mkdir -p /usr/local/lib/JAGS
+          sudo ln -sfn $(brew --prefix jags)/lib/JAGS/modules-4 /usr/local/lib/JAGS/modules-4
         shell: bash
 
       - name: Debug Homebrew Path
@@ -141,6 +144,10 @@ jobs:
           ls -l $(brew --prefix jags)/lib/JAGS
           echo 'ls -l $JAGS_HOME'
           ls -l $JAGS_HOME
+          echo 'ls -l /usr/local/lib/JAGS'
+          ls -l /usr/local/lib/JAGS
+          echo 'ls -l /usr/local/lib/JAGS/modules-4'
+          ls -l /usr/local/lib/JAGS/modules-4
 
       - name: Install system dependencies on linux
         if: runner.os == 'Linux'
