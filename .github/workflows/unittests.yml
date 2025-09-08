@@ -140,7 +140,7 @@ jobs:
         with:
           extra-packages: |
             any::rcmdcheck
-            github::jasp-stats/jaspTools
+            github::vandenman/jaspTools@llm
           needs: check
           cache-version: 3
 
