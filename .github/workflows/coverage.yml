@@ -102,15 +102,35 @@ jobs:
           echo "::endgroup::"
         shell: bash
 
+      # adjusted from https://github.com/r-lib/actions/blob/6b49fefb2846ed3e5e6e58366e7f7dfe01377f02/setup-renv/action.yaml#L25-L28
+      - name: Set RENV_PATHS_ROOT
+        shell: bash
+        run: |
+          echo "RENV_PATHS_ROOT=${{ runner.temp }}/renv" >> $GITHUB_ENV
+
       - name: Install system dependencies on linux
+        if: runner.os == 'Linux' && matrix.packages == 'lockfile'
         run: |
           install.packages("renv")
           lib <- Sys.getenv("R_LIB_FOR_PAK")
           lf <- renv::lockfile_read("renv.lock")
-          pkgs <- Filter(function(x) x$Source != "GitHub", lf$Packages)
-          pkgs2 <- unname(vapply(pkgs, FUN = `[[`, FUN.VALUE = character(1L), "Package"))
+          # TODO: this should actually use the version from the lockfile as well...
+          # not sure how to do that efficiently though, we could redirect everything to
+          # cran/pkg@version? that would make a ton of github api calls though
+          pkgs <- vapply(lf$Packages,
+               FUN = function(x) {
+                 if (x$Source == "GitHub") {
+                   paste0(x$RemoteUsername, "/", x$RemoteRepo)
+                 } else {
+                   x$Package
+                 }
+               },
+               FUN.VALUE = character(1L)
+          )
+          # add jaspTools manually if missing (it requires libarchive)
+          pkgs <- union(pkgs, "jasp-stats/jaspTools")
           .libPaths(lib) # make sure pak is found
-          res <- pak::pkg_sysreqs(pkgs2, sysreqs_platform = "ubuntu")
+          res <- pak::pkg_sysreqs(pkgs, sysreqs_platform = "ubuntu")
           cmd <- paste("sudo", res$install_scripts)
           cat(sprintf("Running cmd:\n%s\n", cmd))
           system(paste("sudo", res$install_scripts))
@@ -119,14 +139,6 @@ jobs:
       - uses: r-lib/actions/setup-renv@v2
         with:
           cache-version: 4
-      - name: Test coverage
-        run: |
-          cov <- covr::package_coverage(
-            quiet = FALSE,
-            clean = FALSE,
-            install_path = file.path(normalizePath(Sys.getenv("RUNNER_TEMP"), winslash = "/"), "package")
-          )
-
 
       - name: Install jaspTools if missing from lockfile
         run: |
