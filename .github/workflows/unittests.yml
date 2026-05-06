@@ -53,7 +53,7 @@ jobs:
         packages: [lockfile]
         include:
         - os: ubuntu-latest
-          r: release
+          r: 4.5.2
           packages: latest
 
     env:
