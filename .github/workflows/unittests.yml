@@ -49,11 +49,11 @@ jobs:
       fail-fast: false
       matrix:
         os: [macos-latest, windows-latest, ubuntu-latest]
-        r: [release]
+        r: ['4.5.2']
         packages: [lockfile]
         include:
         - os: ubuntu-latest
-          r: 4.5.2
+          r: '4.5.2'
           packages: latest
 
     env:
