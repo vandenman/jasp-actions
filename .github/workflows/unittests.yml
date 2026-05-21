@@ -237,7 +237,7 @@ jobs:
       - uses: r-lib/actions/setup-renv@v2
         if: matrix.packages == 'lockfile'
         with:
-          cache-version: 5
+          cache-version: 6
 
       - name: Install jaspTools if missing from lockfile
         if: matrix.packages == 'lockfile'
