@@ -206,6 +206,7 @@ jobs:
         shell: bash
         run: |
           echo "RENV_PATHS_ROOT=${{ runner.temp }}/renv" >> $GITHUB_ENV
+          echo "R_PKG_CACHE_DIR=${{ runner.temp }}/pkgcache" >> $GITHUB_ENV
 
       - name: Install system dependencies on linux
         if: runner.os == 'Linux' && matrix.packages == 'lockfile'
