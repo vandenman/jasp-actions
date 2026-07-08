@@ -37,7 +37,6 @@ jobs:
           r-version: '4.5.2'
 
       - name: Install system dependencies on macOS
-        if: runner.os == 'macOS'
         uses: r-hub/actions/setup-r-sysreqs@v1
         with:
           type: full
@@ -47,14 +46,14 @@ jobs:
           GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
         run: |
           install.packages("remotes", repos = "https://cloud.r-project.org")
-          remotes::install_github("jasp-stats/jaspModuleTools@repo-server")
+          remotes::install_github("jasp-stats/jaspModuleTools")
         shell: Rscript {0}
 
       - name: Build Module
         env:
           GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          jaspModuleTools::build("./", build_bundle = TRUE)
+          jaspModuleTools::compile("./", workdir = "./workdir", resultdir='./bundles_build')
         shell: Rscript {0}
 
       - name: Upload Bundle Artifact
